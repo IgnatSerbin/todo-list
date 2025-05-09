@@ -1,0 +1,9 @@
+Package: todo-list
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libncurses5
+Maintainer: Ignat Serbin <iserbin@icloud.com>
+Description: Simple TODO list with ncurses UI 
+ This is a simple console TODO app built in C using ncurses library.
