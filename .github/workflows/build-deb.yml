@@ -1,0 +1,38 @@
+name: Build and Release .deb Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deb:
+    name: Build .deb package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image and .deb package
+        run: |
+          docker build -t todo-builder .
+          mkdir -p output
+          docker run --rm -v $(pwd)/output:/output todo-builder
+
+      - name: Check if .deb exists
+        run: |
+          if [ ! -f output/todo.deb ]; then
+            echo "❌ File output/todo.deb not found!"
+            exit 1
+          fi
+          echo "✅ File found"
+
+      - name: Upload .deb as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: todo.deb
+          path: output/todo.deb
